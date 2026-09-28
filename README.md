@@ -31,9 +31,26 @@ Educational institutions store large volumes of academic data in student record 
 > **Mini-Capstone Project** — Special Topics in Computer Science
 > Demonstrated at the intersection of **Software Engineering**, **Data Analytics**, and **Machine Learning**.
 
-> 📖 **Presentation-friendly project guide:** [`docs/project-guide.html`](docs/project-guide.html) — a self-contained showcase you can open in Chrome during the defence.
+> 📖 **Presentation-friendly project guide:** [`docs/project-guide.html`](docs/project-guide.html)
 
 ---
+
+### 🎯 Skills Demonstrated
+
+This project demonstrates an end-to-end pipeline from raw database records to
+a iterative decision-support interface:
+
+| Domain | Skills |
+|---|---|
+| **Data Engineering** | SQL aggregation · cohort analysis · trend computation · read-only integration |
+| **Data Science** | Feature engineering · class imbalance handling · model evaluation (accuracy, precision, recall, F1, AUC-ROC, cross-validation) |
+| **Machine Learning** | Logistic Regression · interpretable ML · feature coefficients · model serialization |
+| **Software Engineering** | Node.js · Express · REST API · MySQL · authentication · session management · frontend/backend separation |
+| **Systems Thinking** | Read-only safety · DB-layer privilege control · cross-language integration (Node ↔ Python) |
+| **Responsible AI** | Model Card · documented limitations · human-in-the-loop decision support |
+
+The takeaway: **a real database, turned into an application, with an analytics
+and ML layer, integrated into a usable decision-support system.**
 
 ## 📸 System Walkthrough — Screenshots with Explanations
 
@@ -187,14 +204,14 @@ Chosen because:
 
 - **Interpretable** — coefficients directly show feature influence
 - **Fast** — retrains in seconds, suitable for a live "retrain" button
-- **Well-calibrated probabilities** — meaningful risk scores
+- **Probability output** — produces interpretable risk estimates
 - **Appropriate for dataset size** — performs well without huge training data
 
 ### At-Risk Definition
 
 > A student is **At-Risk** if they failed **≥ 50%** of attempted modules in their most recent completed semester.
 
-Evidence-based, actionable, and avoids data leakage (uses past performance only).
+The current target is constructed from historical academic performance, making the model suitable as a demonstration of classification and decision-support integration. However, the current feature/target construction requires further refinement before the model can be treated as a genuinely predictive early-warning model.
 
 ### Top Predictors
 
@@ -249,3 +266,76 @@ Evidence-based, actionable, and avoids data leakage (uses past performance only)
 ```bash
 git clone https://github.com/Keotshepile2/Academic-Analytics-System.git
 cd Academic-Analytics-System
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Import the database
+
+```bash
+mysql -u root -p < database/Dump20260823.sql
+```
+
+### 4. Create the read-only user
+
+```sql
+CREATE USER 'apa_dss_user'@'localhost'
+  IDENTIFIED WITH mysql_native_password BY 'your_secure_password';
+GRANT SELECT ON student_record_system.* TO 'apa_dss_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+### 5. Configure environment
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your credentials. Minimum required variables:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_root_password
+DB_NAME=student_record_system
+
+APA_DSS_DB_USER=apa_dss_user
+APA_DSS_DB_PASSWORD=your_secure_password
+APA_DSS_DB_NAME=student_record_system
+
+SESSION_SECRET=change_this_to_a_long_random_string
+PORT=3000
+```
+
+### 6. Train the ML model
+
+```bash
+cd ml-pipeline
+python -m venv venv
+venv\Scripts\activate          # Windows
+# source venv/bin/activate     # macOS / Linux
+pip install -r requirements.txt
+
+python data/extract.py
+python data/preprocess.py
+python models/train.py
+python models/evaluate.py
+
+cd ..
+```
+
+### 7. Run
+
+```bash
+npm start
+```
+
+Open **http://localhost:3000/apa-dss/login** and log in with an admin account from the `admins` table.
+
+---
+
+📖 **Full setup guide, troubleshooting, and deployment notes:** [`docs/TECHNICAL.md` → §9](docs/TECHNICAL.md#9-deployment-considerations)
