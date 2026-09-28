@@ -155,4 +155,36 @@ The system is built on top of an existing SMS (Student Management System) withou
 \## Architecture
 
 
+---
+
+## ML Model — Key Metrics
+
+Trained on 480 students, tested on 120 held-out students.
+
+| Metric | Value |
+|--------|-------|
+| Accuracy | 93.3% |
+| Precision | 85.0% |
+| Recall | 94.4% |
+| F1-Score | 89.5% |
+| AUC-ROC | 98.6% |
+| 5-fold CV Accuracy | 91.0% ± 1.7% |
+
+**Interpretability:** Feature coefficients (from logistic regression) show that `avg_mark_last_sem`, `failure_rate`, and `num_failed` are the strongest predictors.
+
+**Limitations:** Trained on synthetic data. Decision-support only — not a diagnosis or automated decision.
+
+---
+
+## Setup Instructions
+
+### Prerequisites
+- Node.js 18+
+- MySQL 8.0+
+- Python 3.10+
+
+### Step 1: Clone the repository
+```bash
+git clone https://github.com/Keotshepile2/Academic-Analytics-System.git
+cd apa-dss
 
