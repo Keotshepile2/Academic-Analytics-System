@@ -1,0 +1,28 @@
+{
+  "feature_cols": [
+    "avg_mark",
+    "num_failed",
+    "num_modules",
+    "failure_rate",
+    "gpa",
+    "avg_mark_last_sem",
+    "year_level",
+    "declining_trend"
+  ],
+  "target_col": "at_risk",
+  "feature_importance": {
+    "avg_mark": 1.2330738980926546,
+    "num_failed": 0.9760851883446604,
+    "num_modules": -1.0739384314407296,
+    "failure_rate": 1.8343931647310259,
+    "gpa": 0.5977401753474856,
+    "avg_mark_last_sem": -4.166766864332345,
+    "year_level": 1.1201358054639388,
+    "declining_trend": -0.186194469271234
+  },
+  "n_train": 480,
+  "n_test": 120,
+  "n_positive": 182,
+  "n_negative": 418,
+  "test_size": 0.2
+}

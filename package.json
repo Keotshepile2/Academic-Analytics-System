@@ -1,0 +1,20 @@
+{
+  "name": "academic-record-management-system",
+  "version": "1.0.0",
+  "description": "Academic Performance Analytics and Decision Support System",
+  "main": "backend/app.js",
+  "scripts": {
+    "start": "node backend/app.js",
+    "dev": "nodemon backend/app.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.24.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

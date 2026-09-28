@@ -1,0 +1,14 @@
+/* ============================================
+   STUDENTS PAGE SPECIFIC STYLES
+   ============================================ */
+
+/* Risk indicators - using components.css */
+.risk-low { color: #2ECC71; }
+.risk-medium { color: #F39C12; }
+.risk-high { color: #E74C3C; }
+
+/* Status badges - using components.css */
+
+/* Stats cards are in components.css */
+
+/* Table styles are in components.css */

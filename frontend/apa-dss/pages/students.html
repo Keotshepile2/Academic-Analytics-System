@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students | APA-DSS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============================================
+           COMPLETE CSS
+           ============================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #F0F2F5; min-height: 100vh; }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed; left: 0; top: 0; width: 260px; height: 100%;
+            background: #1A3A5C; color: white; padding: 0; overflow-y: auto; z-index: 1000;
+        }
+        .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-header .logo { font-size: 24px; font-weight: 800; }
+        .sidebar-header .logo .apa { color: #D4A847; }
+        .sidebar-header .logo .dss { color: white; }
+        .sidebar-header .subtitle { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+        .sidebar-nav { padding: 16px 0; }
+        .sidebar-nav .nav-item {
+            padding: 12px 24px; display: flex; align-items: center; gap: 12px;
+            color: rgba(255,255,255,0.7); text-decoration: none; transition: all 0.3s;
+            cursor: pointer; border-left: 3px solid transparent;
+        }
+        .sidebar-nav .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .sidebar-nav .nav-item.active { background: rgba(255,255,255,0.1); color: white; border-left-color: #D4A847; }
+        .sidebar-nav .nav-item i { width: 20px; font-size: 16px; }
+        .sidebar-nav .nav-label { padding: 8px 24px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+        
+        .main-content { margin-left: 260px; padding: 24px 32px; min-height: 100vh; }
+        
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #E5E7EB;
+        }
+        .topbar h1 { font-size: 28px; font-weight: 700; color: #1A1A2E; }
+        .topbar h1 span { color: #D4A847; }
+        .topbar .admin-info { display: flex; align-items: center; gap: 16px; }
+        .topbar .admin-info span { font-weight: 500; color: #1A1A2E; }
+        .topbar .admin-info .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #D4A847; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 18px;
+        }
+        .topbar .logout-btn {
+            padding: 8px 16px; background: #E74C3C; color: white;
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 500;
+            transition: background 0.3s;
+        }
+        .topbar .logout-btn:hover { background: #C0392B; }
+        
+        .data-source {
+            background: #E8F4FD; border-radius: 8px; padding: 10px 16px;
+            margin-bottom: 24px; border-left: 4px solid #1A3A5C;
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+        .data-source span { color: #1A3A5C; font-size: 14px; }
+        .badge-success { background: #D4EDDA; color: #155724; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-info { background: #D1ECF1; color: #0C5460; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-timestamp { font-size: 12px; color: #6B7280; }
+        
+        .filters {
+            background: white; border-radius: 12px; padding: 16px 20px;
+            margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .filters .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+        .filters .search-box { flex: 1; min-width: 180px; position: relative; }
+        .filters .search-box input {
+            width: 100%; padding: 8px 14px 8px 36px;
+            border: 2px solid #E5E7EB; border-radius: 8px; font-size: 14px;
+            font-family: 'Inter', sans-serif; transition: border-color 0.3s;
+        }
+        .filters .search-box input:focus { outline: none; border-color: #1A3A5C; }
+        .filters .search-box i {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            color: #9CA3AF; font-size: 14px;
+        }
+        .filters select {
+            padding: 8px 14px; border: 2px solid #E5E7EB; border-radius: 8px;
+            font-size: 14px; font-family: 'Inter', sans-serif; background: white;
+            cursor: pointer; min-width: 130px;
+        }
+        .filters select:focus { outline: none; border-color: #1A3A5C; }
+        .filters .badge-count {
+            background: #1A3A5C; color: white; padding: 4px 12px;
+            border-radius: 20px; font-size: 13px; font-weight: 600;
+        }
+        .filters .clear-btn {
+            padding: 6px 14px; background: #E5E7EB; color: #1A1A2E;
+            border: none; border-radius: 8px; cursor: pointer; font-size: 13px;
+            font-weight: 500; transition: background 0.3s;
+        }
+        .filters .clear-btn:hover { background: #D1D5DB; }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 16px; margin-bottom: 24px;
+        }
+        .stats-card {
+            background: white; border-radius: 12px; padding: 16px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-left: 4px solid #1A3A5C;
+        }
+        .stats-card .label { font-size: 12px; color: #6B7280; font-weight: 500; }
+        .stats-card .value { font-size: 24px; font-weight: 700; color: #1A1A2E; }
+        .stats-card .sub { font-size: 12px; color: #9CA3AF; }
+        .stats-card.green { border-left-color: #2ECC71; }
+        .stats-card.red { border-left-color: #E74C3C; }
+        .stats-card.gold { border-left-color: #D4A847; }
+        .stats-card.blue { border-left-color: #1A3A5C; }
+        
+        /* Table */
+        .table-container {
+            background: white; border-radius: 12px; padding: 20px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            text-align: left; padding: 10px 14px; font-size: 11px;
+            font-weight: 600; color: #6B7280; text-transform: uppercase;
+            letter-spacing: 0.5px; border-bottom: 2px solid #E5E7EB;
+            cursor: pointer; user-select: none; white-space: nowrap;
+        }
+        thead th:hover { color: #1A3A5C; }
+        thead th i { margin-left: 4px; font-size: 10px; }
+        tbody td {
+            padding: 10px 14px; font-size: 13px; color: #1A1A2E;
+            border-bottom: 1px solid #F3F4F6; vertical-align: middle;
+        }
+        tbody tr:hover { background: #F9FAFB; }
+        tbody tr.risk-high { border-left: 3px solid #E74C3C; }
+        tbody tr.risk-medium { border-left: 3px solid #F39C12; }
+        tbody tr.risk-low { border-left: 3px solid #2ECC71; }
+        
+        .status-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .status-active { background: #D4EDDA; color: #155724; }
+        .status-atrisk { background: #F8D7DA; color: #721C24; }
+        .status-graduated { background: #D1ECF1; color: #0C5460; }
+        .status-withdrawn { background: #E5E7EB; color: #6B7280; }
+        
+        .risk-low { color: #2ECC71; }
+        .risk-medium { color: #F39C12; }
+        .risk-high { color: #E74C3C; }
+        
+        .progression-up { color: #2ECC71; }
+        .progression-down { color: #E74C3C; }
+        .progression-stable { color: #F39C12; }
+        
+        .btn-view {
+            padding: 4px 10px; background: #1A3A5C; color: white;
+            border: none; border-radius: 6px; cursor: pointer; font-size: 11px;
+            transition: background 0.3s;
+        }
+        .btn-view:hover { background: #2A4A6C; }
+        
+        .empty-state { text-align: center; padding: 40px 20px; color: #9CA3AF; }
+        .empty-state i { font-size: 40px; display: block; margin-bottom: 12px; }
+        
+        .footer-text {
+            text-align: center; padding: 16px; color: #9CA3AF;
+            font-size: 13px; border-top: 1px solid #E5E7EB; margin-top: 24px;
+        }
+        .footer-text i { color: #D4A847; }
+        
+        /* Pagination */
+        .pagination {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 16px; border-top: 1px solid #E5E7EB;
+            margin-top: 16px;
+        }
+        .pagination .info { font-size: 13px; color: #6B7280; }
+        .pagination .controls { display: flex; gap: 6px; }
+        .pagination .controls button {
+            padding: 6px 14px; border: 1px solid #E5E7EB; border-radius: 6px;
+            background: white; cursor: pointer; font-size: 13px;
+            transition: all 0.3s;
+        }
+        .pagination .controls button:hover:not(:disabled) { background: #1A3A5C; color: white; border-color: #1A3A5C; }
+        .pagination .controls button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination .controls button.active { background: #1A3A5C; color: white; border-color: #1A3A5C; }
+        
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .sidebar { width: 200px; }
+            .main-content { margin-left: 200px; padding: 16px; }
+            .filters .row { flex-direction: column; }
+            .filters .search-box { width: 100%; }
+            .filters select { width: 100%; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .topbar h1 { font-size: 22px; }
+            .pagination { flex-direction: column; gap: 12px; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { width: 60px; }
+            .sidebar-header .logo { font-size: 18px; }
+            .sidebar-header .subtitle { display: none; }
+            .sidebar-nav .nav-item span { display: none; }
+            .sidebar-nav .nav-label { display: none; }
+            .main-content { margin-left: 60px; padding: 12px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .topbar h1 { font-size: 18px; }
+            .topbar .admin-info span { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo"><span class="apa">APA</span><span class="dss">-DSS</span></div>
+            <div class="subtitle">Academic Performance Analytics</div>
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="/apa-dss/dashboard" class="nav-item"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+            <a href="/apa-dss/students" class="nav-item active"><i class="fas fa-users"></i> <span>Students</span></a>
+            <a href="/apa-dss/modules" class="nav-item"><i class="fas fa-book"></i> <span>Modules</span></a>
+            <div class="nav-label">Analytics</div>
+            <a href="/apa-dss/programmes" class="nav-item"><i class="fas fa-graduation-cap"></i> <span>Programmes</span></a>
+            <a href="/apa-dss/faculties" class="nav-item"><i class="fas fa-university"></i> <span>Faculties</span></a>
+            <div class="nav-label">Machine Learning</div>
+            <a href="/apa-dss/at-risk" class="nav-item"><i class="fas fa-exclamation-triangle"></i> <span>At-Risk Students</span></a>
+            <div class="nav-label">Tools</div>
+            <a href="/apa-dss/reports" class="nav-item"><i class="fas fa-file-alt"></i> <span>Reports</span></a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <h1>👨‍🎓 <span>Student</span> Analytics</h1>
+            <div class="admin-info">
+                <span id="adminName">Loading...</span>
+                <div class="avatar" id="adminAvatar">K</div>
+                <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <!-- Data Source -->
+        <div class="data-source">
+            <i class="fas fa-database" style="color: #1A3A5C;"></i>
+            <span>Data source: <strong>student_record_system</strong></span>
+            <span class="badge-success"><i class="fas fa-check-circle"></i> Live Data</span>
+            <span class="badge-info"><i class="fas fa-lock"></i> Read-Only Access</span>
+            <span class="badge-timestamp" style="margin-left: auto;">
+                <i class="far fa-clock"></i> Last updated: <span id="updateTime">Today</span>
+            </span>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stats-card blue"><div class="label">Total Students</div><div class="value" id="totalStudents">0</div><div class="sub">Active students</div></div>
+            <div class="stats-card green"><div class="label">Average Mark</div><div class="value" id="avgMark">0%</div><div class="sub">Overall performance</div></div>
+            <div class="stats-card gold"><div class="label">Pass Rate</div><div class="value" id="passRate">0%</div><div class="sub">Overall pass rate</div></div>
+            <div class="stats-card red"><div class="label">At-Risk Students</div><div class="value" id="atRiskCount">0</div><div class="sub">Need academic attention</div></div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="row">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by name or ID...">
+                </div>
+                <select id="programmeFilter">
+                    <option value="all">All Programmes</option>
+                    <option value="BSC-CS">BSc Computer Science</option>
+                    <option value="BEN-CE">BEng Civil Engineering</option>
+                    <option value="BBA-BA">BBA Business Administration</option>
+                    <option value="BSC706">BSc Math & Computer Sciences</option>
+                    <option value="BSC723">BSc Physical Science</option>
+                </select>
+                <select id="facultyFilter">
+                    <option value="all">All Faculties</option>
+                    <option value="FCS">Faculty of Computer Science</option>
+                    <option value="FEN">Faculty of Engineering</option>
+                    <option value="FBS">Faculty of Business Studies</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="At-Risk">At-Risk</option>
+                    <option value="Graduated">Graduated</option>
+                    <option value="Withdrawn">Withdrawn</option>
+                </select>
+                <select id="riskFilter">
+                    <option value="all">All Risk Levels</option>
+                    <option value="Low">Low Risk</option>
+                    <option value="Medium">Medium Risk</option>
+                    <option value="High">High Risk</option>
+                </select>
+                <select id="semesterFilter">
+                    <option value="all">All Semesters</option>
+                    <option value="S20252">2025 Semester 2</option>
+                    <option value="S20251">2025 Semester 1</option>
+                    <option value="S20242">2024 Semester 2</option>
+                    <option value="S20241">2024 Semester 1</option>
+                    <option value="S20232">2023 Semester 2</option>
+                    <option value="S20231">2023 Semester 1</option>
+                </select>
+                <span class="badge-count" id="resultCount">0 students</span>
+                <button class="clear-btn" id="clearFilters"><i class="fas fa-times"></i> Clear</button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div id="tableContent"></div>
+            <div class="pagination" id="pagination">
+                <div class="info" id="paginationInfo">Showing 1-10 of 0 students</div>
+                <div class="controls" id="paginationControls"></div>
+            </div>
+        </div>
+
+        <div class="footer-text">
+            <i class="fas fa-users"></i> Student Analytics • Academic Analytics Portal • <span id="footerYear"></span>
+        </div>
+    </div>
+
+    <!-- Student Detail Modal -->
+    <div id="studentModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+        <div style="background:white;border-radius:16px;max-width:700px;width:90%;max-height:90vh;overflow-y:auto;padding:32px;position:relative;">
+            <button onclick="closeModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#6B7280;">&times;</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+    // ============================================
+    // STUDENTS PAGE - LIVE DATA
+    // ============================================
+
+    // ---------- STATE ----------
+    let filteredData = [];
+    let currentPage = 1;
+    const pageSize = 10;
+    let currentSort = { column: 'id', direction: 'asc' };
+    let isLoading = false;
+
+    // ---------- UTILITY ----------
+    function getInitials(name) {
+        if (!name) return 'U';
+        return name.charAt(0).toUpperCase();
+    }
+
+    function getCurrentDate() {
+        const now = new Date();
+        return now.toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function getCurrentYear() { return new Date().getFullYear(); }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func(...args), wait);
+        };
+    }
+
+    function getRiskColor(risk) {
+        if (!risk) return '#6B7280';
+        if (risk === 'Low') return '#2ECC71';
+        if (risk === 'Medium') return '#F39C12';
+        return '#E74C3C';
+    }
+
+    function getRiskIcon(risk) {
+        if (!risk) return 'fa-circle';
+        if (risk === 'Low') return 'fa-check-circle';
+        if (risk === 'Medium') return 'fa-exclamation-circle';
+        return 'fa-exclamation-triangle';
+    }
+
+    function getProgressionIcon(progression) {
+        if (!progression) return '<i class="fas fa-minus progression-stable"></i>';
+        if (progression === 'up') return '<i class="fas fa-arrow-up progression-up"></i>';
+        if (progression === 'down') return '<i class="fas fa-arrow-down progression-down"></i>';
+        return '<i class="fas fa-minus progression-stable"></i>';
+    }
+
+    // ---------- RENDER ----------
+   function renderStats(data) {
+    const total = data ? data.length : 0;
+    const avgMark = total > 0
+        ? data.reduce((s, s2) => s + (parseFloat(s2.avgMark) || 0), 0) / total
+        : 0;
+
+    document.getElementById('totalStudents').textContent = total;
+    document.getElementById('avgMark').textContent = avgMark.toFixed(1) + '%';
+    document.getElementById('atRiskCount').textContent =
+        data ? data.filter(s => s.riskLevel === 'High' || s.riskLevel === 'Medium').length : 0;
+
+    // Fetch canonical pass rate from shared endpoint
+    fetch('/api/apa-dss/live/pass-rate')
+        .then(r => r.json())
+        .then(result => {
+            if (result.success) {
+                document.getElementById('passRate').textContent =
+                    (Number(result.data.pass_rate) || 0).toFixed(1) + '%';
+            }
+        })
+        .catch(() => {
+            document.getElementById('passRate').textContent = '—';
+        });
+}
+
+    function renderTable(data) {
+        const container = document.getElementById('tableContent');
+        const total = data ? data.length : 0;
+        
+        if (total === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-user-slash"></i><h3>No students found</h3><p>Try adjusting your search or filters</p></div>`;
+            document.getElementById('paginationInfo').textContent = 'Showing 0 students';
+            document.getElementById('paginationControls').innerHTML = '';
+            return;
+        }
+
+        const start = (currentPage - 1) * pageSize;
+        const end = Math.min(start + pageSize, total);
+        const pageData = data.slice(start, end);
+
+        let html = `<table><thead><tr>
+            <th onclick="sortTable('id')">Student ID <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('name')">Name <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('programme')">Programme <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('faculty')">Faculty <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('avgMark')">Avg Mark <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('gpa')">GPA <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('passedModules')">Passed/Failed <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('status')">Status <i class="fas fa-sort"></i></th>
+            <th onclick="sortTable('riskLevel')">Risk <i class="fas fa-sort"></i></th>
+            <th>Action</th>
+        </tr></thead><tbody>`;
+
+        pageData.forEach(s => {
+            const statusClass = s.status === 'Active' ? 'status-active' : 
+                               s.status === 'At-Risk' ? 'status-atrisk' :
+                               s.status === 'Graduated' ? 'status-graduated' : 'status-withdrawn';
+            const riskClass = s.riskLevel === 'Low' ? 'risk-low' : s.riskLevel === 'Medium' ? 'risk-medium' : 'risk-high';
+            const riskIcon = getRiskIcon(s.riskLevel);
+            const gpaColor = s.gpa >= 3.5 ? '#2ECC71' : s.gpa >= 2.5 ? '#F39C12' : '#E74C3C';
+            
+            html += `<tr class="risk-${(s.riskLevel || 'low').toLowerCase()}">
+                <td><strong>${s.id || 'N/A'}</strong></td>
+                <td>${s.name || 'Unknown'}</td>
+                <td>${s.programme || 'N/A'}</td>
+                <td>${s.faculty || 'N/A'}</td>
+                <td style="color:${(parseFloat(s.avgMark) || 0) < 50 ? '#E74C3C' : (parseFloat(s.avgMark) || 0) < 65 ? '#F39C12' : '#2ECC71'}">${(parseFloat(s.avgMark) || 0).toFixed(1)}%</td>
+               <td style="color:${gpaColor}">${(parseFloat(s.gpa) || 0).toFixed(2)}</td>
+                <td>${s.passedModules || 0}/${s.failedModules || 0}</td>
+                <td><span class="status-badge ${statusClass}">${s.status || 'Unknown'}</span></td>
+                <td><i class="fas ${riskIcon} ${riskClass}"></i> ${s.riskLevel || 'Low'}</td>
+                <td><button class="btn-view" onclick="viewStudent(${s.id})"><i class="fas fa-eye"></i> View</button></td>
+            </tr>`;
+        });
+
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+        document.getElementById('resultCount').textContent = total + ' students';
+
+        // Pagination
+        const totalPages = Math.ceil(total / pageSize);
+        document.getElementById('paginationInfo').textContent = `Showing ${start+1}-${end} of ${total} students`;
+        
+        let controlsHtml = `<button onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+        for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+            controlsHtml += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+        }
+        if (totalPages > 5) controlsHtml += `<span>...</span><button onclick="goToPage(${totalPages})">${totalPages}</button>`;
+        controlsHtml += `<button onclick="goToPage(${Math.min(currentPage+1, totalPages)})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+        document.getElementById('paginationControls').innerHTML = controlsHtml;
+    }
+
+    // ---------- SORT & FILTER ----------
+    function sortTable(column) {
+        if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.column = column;
+            currentSort.direction = 'asc';
+        }
+        currentPage = 1;
+        applyFilters();
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.ceil(filteredData.length / pageSize);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderTable(filteredData);
+    }
+
+    // ---------- LOAD LIVE DATA ----------
+    function applyFilters() {
+        if (isLoading) return;
+        isLoading = true;
+        
+        const searchTerm = document.getElementById('searchInput')?.value || '';
+        const programmeFilter = document.getElementById('programmeFilter')?.value || 'all';
+        const facultyFilter = document.getElementById('facultyFilter')?.value || 'all';
+        const statusFilter = document.getElementById('statusFilter')?.value || 'all';
+        const riskFilter = document.getElementById('riskFilter')?.value || 'all';
+        const semesterFilter = document.getElementById('semesterFilter')?.value || 'all';
+        
+        const params = new URLSearchParams();
+        if (searchTerm) params.append('search', searchTerm);
+        if (programmeFilter !== 'all') params.append('programme', programmeFilter);
+        if (facultyFilter !== 'all') params.append('faculty', facultyFilter);
+        if (statusFilter !== 'all') params.append('status', statusFilter);
+        if (riskFilter !== 'all') params.append('risk', riskFilter);
+        if (semesterFilter !== 'all') params.append('semester', semesterFilter);
+        
+        const url = '/api/apa-dss/live/students?' + params.toString();
+        console.log('🔄 Fetching students from:', url);
+        
+        // Show loading state
+        document.getElementById('tableContent').innerHTML = `
+            <div style="text-align:center;padding:40px;color:#9CA3AF;">
+                <i class="fas fa-spinner fa-spin" style="font-size:24px;"></i>
+                <p>Loading students...</p>
+            </div>
+        `;
+        
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    filteredData = result.data || [];
+                    // Sort
+                    filteredData.sort((a, b) => {
+                        let aVal = a[currentSort.column] || '';
+                        let bVal = b[currentSort.column] || '';
+                        if (typeof aVal === 'string') { aVal = aVal.toLowerCase(); bVal = bVal.toLowerCase(); }
+                        if (aVal < bVal) return currentSort.direction === 'asc' ? -1 : 1;
+                        if (aVal > bVal) return currentSort.direction === 'asc' ? 1 : -1;
+                        return 0;
+                    });
+                    renderStats(filteredData);
+                    renderTable(filteredData);
+                    console.log('✅ Students loaded:', filteredData.length);
+                } else {
+                    throw new Error(result.error || 'Unknown error');
+                }
+            })
+            .catch(error => {
+                console.error('❌ Error loading students:', error);
+                document.getElementById('tableContent').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle" style="color:#E74C3C;"></i>
+                        <h3>Failed to load students</h3>
+                        <p>${error.message}</p>
+                        <button onclick="applyFilters()" style="margin-top:12px;padding:8px 20px;background:#1A3A5C;color:white;border:none;border-radius:8px;cursor:pointer;">
+                            <i class="fas fa-sync"></i> Retry
+                        </button>
+                    </div>
+                `;
+            })
+            .finally(() => {
+                isLoading = false;
+            });
+    }
+
+    // ---------- AUTH ----------
+    function checkAuth() {
+        fetch('/api/auth/check')
+            .then(res => res.json())
+            .then(data => {
+                if (!data.authenticated) {
+                    window.location.href = '/apa-dss/login';
+                } else {
+                    document.getElementById('adminName').textContent = '👋 ' + (data.admin?.name || 'Admin');
+                    document.getElementById('adminAvatar').textContent = getInitials(data.admin?.name || 'Admin');
+                }
+            })
+            .catch(() => window.location.href = '/apa-dss/login');
+    }
+
+    // ---------- INIT ----------
+    function initStudents() {
+        console.log('👨‍🎓 Students page loading...');
+        checkAuth();
+        
+        document.getElementById('updateTime').textContent = getCurrentDate() + ' ' + new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('footerYear').textContent = getCurrentYear();
+
+        document.getElementById('logoutBtn')?.addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+            this.disabled = true;
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) window.location.href = '/apa-dss/login';
+                    else { this.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout'; this.disabled = false; }
+                })
+                .catch(() => { this.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout'; this.disabled = false; });
+        });
+
+        // Load data
+        applyFilters();
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('programmeFilter').addEventListener('change', applyFilters);
+        document.getElementById('facultyFilter').addEventListener('change', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('riskFilter').addEventListener('change', applyFilters);
+        document.getElementById('semesterFilter').addEventListener('change', applyFilters);
+        
+        document.getElementById('clearFilters').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('programmeFilter').value = 'all';
+            document.getElementById('facultyFilter').value = 'all';
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('riskFilter').value = 'all';
+            document.getElementById('semesterFilter').value = 'all';
+            applyFilters();
+        });
+
+        // Make functions globally accessible
+        window.sortTable = sortTable;
+        window.goToPage = goToPage;
+        window.applyFilters = applyFilters;
+
+        console.log('✅ Students page ready!');
+    }
+
+    document.addEventListener('DOMContentLoaded', initStudents);
+
+
+    // ============================================
+// STUDENT DETAIL MODAL
+// ============================================
+async function viewStudent(id) {
+    if (!id) return;
+
+    const modal = document.getElementById('studentModal');
+    const content = document.getElementById('modalContent');
+
+    content.innerHTML = `
+        <div style="text-align:center;padding:60px 20px;color:#9CA3AF;">
+            <i class="fas fa-spinner fa-spin" style="font-size:32px;"></i>
+            <p style="margin-top:12px;">Loading student analytics...</p>
+        </div>
+    `;
+    modal.style.display = 'flex';
+
+    let d = null;
+
+    try {
+        const res = await fetch(`/api/apa-dss/live/students/${encodeURIComponent(id)}/detail`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const result = await res.json();
+        if (!result.success) throw new Error(result.error || 'Unknown error');
+        d = result.data;
+
+        // ---- Defensive defaults so nothing crashes ----
+        d.programme_rank = d.programme_rank ?? null;
+        d.programme_cohort = d.programme_cohort ?? 0;
+        d.programme_best = d.programme_best ?? 0;
+        d.programme_worst = d.programme_worst ?? 0;
+        d.percentile = d.percentile ?? null;
+        d.programme_avg = d.programme_avg ?? 0;
+        d.university_avg = d.university_avg ?? 0;
+        d.avg_mark = d.avg_mark ?? 0;
+        d.gpa = d.gpa ?? 0;
+        d.total_modules = d.total_modules ?? 0;
+        d.failed_modules = d.failed_modules ?? 0;
+        d.passed_modules = d.passed_modules ?? 0;
+        d.semester_marks = Array.isArray(d.semester_marks) ? d.semester_marks : [];
+        d.failed_modules_list = Array.isArray(d.failed_modules_list) ? d.failed_modules_list : [];
+
+        // ---- Trend display ----
+        const trendColor =
+            d.trend === 'improving' ? '#2ECC71' :
+            d.trend === 'declining' ? '#E74C3C' :
+            d.trend === 'struggling' ? '#E74C3C' :
+            '#F39C12';
+        const trendIcon =
+            d.trend === 'improving' ? 'fa-arrow-up' :
+            d.trend === 'declining' ? 'fa-arrow-down' :
+            d.trend === 'struggling' ? 'fa-exclamation-circle' :
+            'fa-minus';
+        const trendLabel = d.trend ? (d.trend.charAt(0).toUpperCase() + d.trend.slice(1)) : 'Stable';
+
+        // ---- Comparison delta ----
+        const progDelta = d.avg_mark - d.programme_avg;
+        const progDeltaStr = (progDelta >= 0 ? '+' : '') + progDelta.toFixed(1) + ' pts';
+        const progDeltaColor = progDelta >= 0 ? '#2ECC71' : '#E74C3C';
+
+        // ---- Risk classification ----
+        const failureRate = d.total_modules > 0 ? d.failed_modules / d.total_modules : 0;
+        let riskLevel, riskColor, riskIcon, riskReason, riskAction;
+
+        if (d.avg_mark < 40 || failureRate >= 0.6) {
+            riskLevel = 'HIGH RISK'; riskColor = '#E74C3C'; riskIcon = 'fa-exclamation-triangle';
+            riskReason = `Average mark (${d.avg_mark.toFixed(1)}%) is critical and ${d.failed_modules} of ${d.total_modules} modules failed (${(failureRate*100).toFixed(0)}%).`;
+            riskAction = 'Immediate advising meeting recommended. Review academic pathway options.';
+        } else if (d.avg_mark < 50 || failureRate >= 0.4) {
+            riskLevel = 'AT RISK'; riskColor = '#F39C12'; riskIcon = 'fa-exclamation-circle';
+            riskReason = `Average mark (${d.avg_mark.toFixed(1)}%) is below the 50% pass floor. ${d.failed_modules} module(s) already failed.`;
+            riskAction = 'Schedule a check-in before mid-semester. Discuss study strategies.';
+        } else if (d.trend === 'declining' && progDelta < -5) {
+            riskLevel = 'MONITOR'; riskColor = '#3498DB'; riskIcon = 'fa-eye';
+            riskReason = `Passing but performance is declining and ${Math.abs(progDelta).toFixed(1)} pts below programme average.`;
+            riskAction = 'Monitor next assessment results. Consider tutoring support.';
+        } else {
+            riskLevel = 'ON TRACK'; riskColor = '#2ECC71'; riskIcon = 'fa-check-circle';
+            riskReason = `Average mark (${d.avg_mark.toFixed(1)}%) is healthy and trend is ${d.trend || 'stable'}.`;
+            riskAction = 'No action required. Continue regular monitoring.';
+        }
+
+        // ---- Rank display ----
+        const rankDisplay = (d.programme_rank && d.programme_cohort)
+            ? `${d.programme_rank} of ${d.programme_cohort}` : '—';
+        const percentileDisplay = d.percentile !== null
+            ? `(top ${(100 - d.percentile).toFixed(0)}%)` : '';
+        const rankColor = d.percentile === null ? '#6B7280'
+            : d.percentile >= 75 ? '#2ECC71'
+            : d.percentile >= 40 ? '#F39C12'
+            : '#E74C3C';
+
+        // ---- Build modal HTML ----
+        content.innerHTML = `
+            <h2 style="margin-bottom:4px;color:#1A1A2E;">${d.name}</h2>
+            <p style="color:#6B7280;margin-bottom:16px;">
+                ID: ${d.id} • ${d.programme} • ${d.faculty} • Enrolled ${d.year_enrolled || '—'}
+            </p>
+
+            <div style="background:${riskColor}15;border-left:4px solid ${riskColor};border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                    <i class="fas ${riskIcon}" style="color:${riskColor};font-size:18px;"></i>
+                    <strong style="color:${riskColor};font-size:14px;letter-spacing:0.5px;">${riskLevel}</strong>
+                </div>
+                <div style="font-size:13px;color:#374151;margin-bottom:6px;">
+                    <strong style="color:#1A1A2E;">Why:</strong> ${riskReason}
+                </div>
+                <div style="font-size:13px;color:#374151;">
+                    <strong style="color:#1A1A2E;">Action:</strong> ${riskAction}
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
+                <div style="background:#F9FAFB;padding:12px;border-radius:8px;text-align:center;">
+                    <div style="font-size:11px;color:#6B7280;text-transform:uppercase;">Average Mark</div>
+                    <div style="font-size:20px;font-weight:700;color:${d.avg_mark < 50 ? '#E74C3C' : d.avg_mark < 65 ? '#F39C12' : '#2ECC71'};">${d.avg_mark.toFixed(1)}%</div>
+                </div>
+                <div style="background:#F9FAFB;padding:12px;border-radius:8px;text-align:center;">
+                    <div style="font-size:11px;color:#6B7280;text-transform:uppercase;">GPA</div>
+                    <div style="font-size:20px;font-weight:700;color:${d.gpa >= 3.5 ? '#2ECC71' : d.gpa >= 2.5 ? '#F39C12' : '#E74C3C'};">${d.gpa.toFixed(2)}<span style="font-size:11px;color:#9CA3AF;">/4.0</span></div>
+                </div>
+                <div style="background:#F9FAFB;padding:12px;border-radius:8px;text-align:center;">
+                    <div style="font-size:11px;color:#6B7280;text-transform:uppercase;">Passed / Failed</div>
+                    <div style="font-size:20px;font-weight:700;color:#1A1A2E;">${d.passed_modules}<span style="color:#E74C3C;">/${d.failed_modules}</span></div>
+                </div>
+                <div style="background:#F9FAFB;padding:12px;border-radius:8px;text-align:center;">
+                    <div style="font-size:11px;color:#6B7280;text-transform:uppercase;">Trend</div>
+                    <div style="font-size:14px;font-weight:700;color:${trendColor};">
+                        <i class="fas ${trendIcon}"></i> ${trendLabel}
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#F9FAFB;border-radius:8px;padding:16px;margin-bottom:16px;">
+                <div style="font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:12px;">
+                    <i class="fas fa-trophy" style="color:#D4A847;"></i> Class Rank in Programme
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;text-align:center;">
+                    <div>
+                        <div style="font-size:11px;color:#6B7280;text-transform:uppercase;">Rank</div>
+                        <div style="font-size:20px;font-weight:700;color:${rankColor};">${rankDisplay}</div>
+                        <div style="font-size:11px;color:#9CA3AF;">${percentileDisplay}</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px;color:#6B7280;text-transform:uppercase;">Programme Range</div>
+                        <div style="font-size:16px;font-weight:700;color:#1A1A2E;">${d.programme_worst.toFixed(0)}% – ${d.programme_best.toFixed(0)}%</div>
+                        <div style="font-size:11px;color:#9CA3AF;">lowest – highest</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px;color:#6B7280;text-transform:uppercase;">Programme Avg</div>
+                        <div style="font-size:20px;font-weight:700;color:#1A3A5C;">${d.programme_avg.toFixed(1)}%</div>
+                        <div style="font-size:11px;color:${progDeltaColor};font-weight:600;">${progDeltaStr}</div>
+                    </div>
+                </div>
+                <div style="font-size:12px;color:#4B5563;margin-top:12px;padding:8px 12px;background:#FFF8E1;border-left:3px solid #F39C12;border-radius:4px;">
+                    <i class="fas fa-lightbulb" style="color:#F39C12;"></i>
+                    <strong>Insight:</strong>
+                    ${d.percentile === null
+                        ? 'Rank unavailable — not enough peers with comparable data.'
+                        : d.percentile >= 75
+                        ? `Student is performing in the <strong>top ${(100 - d.percentile).toFixed(0)}%</strong> of their programme.`
+                        : d.percentile >= 40
+                        ? `Student is around the <strong>middle</strong> of their programme cohort.`
+                        : `Student is in the <strong>bottom ${(100 - d.percentile).toFixed(0)}%</strong> of their programme.`
+                    }
+                </div>
+            </div>
+
+            <div style="background:#F9FAFB;border-radius:8px;padding:16px;margin-bottom:16px;">
+                <div style="font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:12px;">
+                    <i class="fas fa-chart-line" style="color:#D4A847;"></i> Marks History by Semester
+                </div>
+                <div style="position:relative;height:220px;width:100%;">
+                    <canvas id="studentMarksChart"></canvas>
+                </div>
+                <div style="font-size:12px;color:#4B5563;margin-top:10px;padding:8px 12px;background:#FFF8E1;border-left:3px solid #F39C12;border-radius:4px;">
+                    <i class="fas fa-lightbulb" style="color:#F39C12;"></i>
+                    <strong>Insight:</strong>
+                    ${d.semester_marks.length >= 2
+                        ? `Performance has been <strong>${d.trend || 'stable'}</strong> across ${d.semester_marks.length} semesters.`
+                        : `Only ${d.semester_marks.length} semester${d.semester_marks.length === 1 ? '' : 's'} of data available.`
+                    }
+                </div>
+            </div>
+
+            <div style="background:#F9FAFB;border-radius:8px;padding:16px;margin-bottom:16px;">
+                <div style="font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:12px;">
+                    <i class="fas fa-users" style="color:#D4A847;"></i> Comparison to Programme & University
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <div>
+                        <div style="display:flex;justify-content:space-between;font-size:12px;color:#6B7280;margin-bottom:2px;">
+                            <span>This student</span><span style="font-weight:600;color:#1A1A2E;">${d.avg_mark.toFixed(1)}%</span>
+                        </div>
+                        <div style="height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden;">
+                            <div style="height:100%;width:${Math.min(100, d.avg_mark)}%;background:${d.avg_mark < 50 ? '#E74C3C' : d.avg_mark < 65 ? '#F39C12' : '#2ECC71'};"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;font-size:12px;color:#6B7280;margin-bottom:2px;">
+                            <span>Programme average</span><span style="font-weight:600;color:#1A1A2E;">${d.programme_avg.toFixed(1)}%</span>
+                        </div>
+                        <div style="height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden;">
+                            <div style="height:100%;width:${Math.min(100, d.programme_avg)}%;background:#1A3A5C;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;font-size:12px;color:#6B7280;margin-bottom:2px;">
+                            <span>University average</span><span style="font-weight:600;color:#1A1A2E;">${d.university_avg.toFixed(1)}%</span>
+                        </div>
+                        <div style="height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden;">
+                            <div style="height:100%;width:${Math.min(100, d.university_avg)}%;background:#D4A847;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            ${d.failed_modules_list.length > 0 ? `
+                <div style="background:#FEF2F2;border-radius:8px;padding:16px;margin-bottom:16px;border-left:4px solid #E74C3C;">
+                    <div style="font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:12px;">
+                        <i class="fas fa-exclamation-triangle" style="color:#E74C3C;"></i> Failed Modules (${d.failed_modules_list.length})
+                    </div>
+                    <div style="max-height:200px;overflow-y:auto;">
+                        <table style="width:100%;font-size:12px;">
+                            <thead>
+                                <tr style="color:#6B7280;font-size:10px;text-transform:uppercase;">
+                                    <th style="text-align:left;padding:4px;">Code</th>
+                                    <th style="text-align:left;padding:4px;">Module</th>
+                                    <th style="text-align:left;padding:4px;">Semester</th>
+                                    <th style="text-align:right;padding:4px;">Mark</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${d.failed_modules_list.map(m => `
+                                    <tr style="border-top:1px solid #F3F4F6;">
+                                        <td style="padding:4px;"><strong>${m.code}</strong></td>
+                                        <td style="padding:4px;">${m.name}</td>
+                                        <td style="padding:4px;color:#6B7280;">${m.semester}</td>
+                                        <td style="padding:4px;text-align:right;color:#E74C3C;font-weight:600;">${m.mark.toFixed(1)}%</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            ` : ''}
+
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+                <button onclick="closeModal()" style="padding:10px 24px;background:#1A3A5C;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;">
+                    Close
+                </button>
+            </div>
+        `;
+
+        // Draw chart after HTML is inserted
+        setTimeout(() => {
+            const canvas = document.getElementById('studentMarksChart');
+            if (!canvas) return;
+
+            if (window._studentMarksChart) {
+                try { window._studentMarksChart.destroy(); } catch(e) {}
+                window._studentMarksChart = null;
+            }
+
+            try {
+                window._studentMarksChart = new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels: d.semester_marks.map(m => m.semester),
+                        datasets: [{
+                            label: 'Avg Mark %',
+                            data: d.semester_marks.map(m => m.avg_mark),
+                            borderColor: '#1A3A5C',
+                            backgroundColor: 'rgba(26,58,92,0.1)',
+                            tension: 0.35,
+                            fill: true,
+                            pointBackgroundColor: '#D4A847',
+                            pointBorderColor: '#1A3A5C',
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => 'Avg Mark: ' + c.parsed.y.toFixed(1) + '%',
+                                    afterLabel: (c) => {
+                                        const m = d.semester_marks[c.dataIndex];
+                                        return `Modules: ${m.modules} • Failed: ${m.failed}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%', font: { size: 10 } } },
+                            x: { ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+                console.log('✅ Chart rendered');
+            } catch (e) {
+                console.error('❌ Chart render error:', e);
+            }
+        }, 150);
+
+    } catch (err) {
+        console.error('Student detail error:', err);
+        content.innerHTML = `
+            <div style="text-align:center;padding:40px 20px;">
+                <i class="fas fa-exclamation-circle" style="font-size:32px;color:#E74C3C;"></i>
+                <h3 style="margin-top:12px;color:#1A1A2E;">Failed to load student details</h3>
+                <p style="color:#6B7280;margin-top:4px;">${err.message}</p>
+                <button onclick="closeModal()" style="margin-top:16px;padding:8px 20px;background:#1A3A5C;color:white;border:none;border-radius:8px;cursor:pointer;">
+                    Close
+                </button>
+            </div>
+        `;
+    }
+}
+
+function closeModal() {
+    const m = document.getElementById('studentModal');
+    if (m) m.style.display = 'none';
+}
+
+window.viewStudent = viewStudent;
+window.closeModal = closeModal;
+
+</script>
+</body>
+</html>

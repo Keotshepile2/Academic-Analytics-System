@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APA-DSS Login | Academic Analytics Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1A3A5C 0%, #2A5A7C 50%, #1A3A5C 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container { width: 100%; max-width: 420px; }
+        .login-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 48px 40px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .branding { text-align: center; margin-bottom: 36px; }
+        .university-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1A3A5C;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .system-name {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+        .system-name .apa { color: #1A3A5C; }
+        .system-name .dss { color: #D4A847; }
+        .system-subtitle {
+            font-size: 13px;
+            font-weight: 400;
+            color: #6B7280;
+            line-height: 1.4;
+        }
+        .login-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-group label i { color: #1A3A5C; font-size: 14px; width: 16px; }
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #F9FAFB;
+            color: #1A1A2E;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #1A3A5C;
+            box-shadow: 0 0 0 4px rgba(26, 58, 92, 0.1);
+            background: #FFFFFF;
+        }
+        .form-group input::placeholder { color: #9CA3AF; }
+        .password-wrapper { position: relative; }
+        .password-wrapper input { width: 100%; padding-right: 48px; }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        .toggle-password:hover { color: #1A3A5C; }
+        .error-message {
+            background: #FEF2F2;
+            border: 1px solid #FCA5A5;
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #991B1B;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        .error-message i { font-size: 16px; flex-shrink: 0; }
+        .login-button {
+            padding: 14px 24px;
+            background: #1A3A5C;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .login-button:hover:not(:disabled) {
+            background: #2A4A6C;
+            box-shadow: 0 4px 16px rgba(26, 58, 92, 0.3);
+        }
+        .login-button:disabled { opacity: 0.7; cursor: not-allowed; }
+        .login-footer {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 13px;
+            color: #9CA3AF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        @media (max-width: 480px) {
+            .login-card { padding: 32px 24px 24px; border-radius: 16px; }
+            .system-name { font-size: 28px; }
+            .system-subtitle { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="branding">
+                <div class="university-name">Academic Analytics Portal</div>
+                <div class="system-name">
+                    <span class="apa">APA</span><span class="dss">-DSS</span>
+                </div>
+                <div class="system-subtitle">Academic Performance Analytics & Decision Support System</div>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="admin@university.edu" required>
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <button type="button" id="togglePassword" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="errorMessage" class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Invalid credentials</span>
+                </div>
+                <button type="submit" id="loginButton" class="login-button">
+                    <span id="buttonText">Sign In</span>
+                    <span id="buttonLoader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+            </form>
+            <div class="login-footer">
+                <span>© 2026 Academic Analytics Portal</span>
+                <span>•</span>
+                <span>System Administrators Only</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const loginButton = document.getElementById('loginButton');
+            const buttonText = document.getElementById('buttonText');
+            const buttonLoader = document.getElementById('buttonLoader');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            // Check if already logged in
+            fetch('/api/auth/check')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.authenticated) {
+                        window.location.href = '/apa-dss/dashboard';
+                    }
+                })
+                .catch(err => console.log('Auth check:', err));
+            
+            // Toggle password
+            togglePasswordBtn.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+            
+            // Login form submission
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+                
+                if (!email || !password) {
+                    showError('Please enter both email and password.');
+                    return;
+                }
+                
+                // Show loading
+                loginButton.disabled = true;
+                buttonText.style.display = 'none';
+                buttonLoader.style.display = 'inline';
+                errorMessage.style.display = 'none';
+                
+                try {
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        window.location.href = '/apa-dss/dashboard';
+                    } else {
+                        showError(data.error || 'Invalid email or password.');
+                        loginButton.disabled = false;
+                        buttonText.style.display = 'inline';
+                        buttonLoader.style.display = 'none';
+                        passwordInput.value = '';
+                    }
+                } catch (error) {
+                    showError('Unable to connect to the server. Please try again.');
+                    loginButton.disabled = false;
+                    buttonText.style.display = 'inline';
+                    buttonLoader.style.display = 'none';
+                }
+            });
+            
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.style.display = 'flex';
+            }
+            
+            // Enter key support
+            passwordInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') loginForm.dispatchEvent(new Event('submit'));
+            });
+            emailInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') passwordInput.focus();
+            });
+        });
+    </script>
+</body>
+</html>

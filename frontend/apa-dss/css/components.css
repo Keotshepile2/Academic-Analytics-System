@@ -1,0 +1,273 @@
+/* ============================================
+   COMPONENTS CSS - Shared styles
+   ============================================ */
+
+/* Reset & Base */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: #F0F2F5;
+    min-height: 100vh;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 100%;
+    background: #1A3A5C;
+    color: white;
+    padding: 0;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: all 0.3s;
+}
+.sidebar-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.sidebar-header .logo { font-size: 24px; font-weight: 800; }
+.sidebar-header .logo .apa { color: #D4A847; }
+.sidebar-header .logo .dss { color: white; }
+.sidebar-header .subtitle {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 4px;
+}
+.sidebar-nav { padding: 16px 0; }
+.sidebar-nav .nav-item {
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+}
+.sidebar-nav .nav-item:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+.sidebar-nav .nav-item.active {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-left-color: #D4A847;
+}
+.sidebar-nav .nav-item i { width: 20px; font-size: 16px; }
+.sidebar-nav .nav-label {
+    padding: 8px 24px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 8px;
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main-content {
+    margin-left: 260px;
+    padding: 24px 32px;
+    min-height: 100vh;
+}
+
+/* ============================================
+   TOP BAR
+   ============================================ */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E5E7EB;
+}
+.topbar h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1A1A2E;
+}
+.topbar h1 span { color: #D4A847; }
+.topbar .admin-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.topbar .admin-info span { font-weight: 500; color: #1A1A2E; }
+.topbar .admin-info .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #D4A847;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 18px;
+}
+.topbar .logout-btn {
+    padding: 8px 16px;
+    background: #E74C3C;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+.topbar .logout-btn:hover { background: #C0392B; }
+
+/* ============================================
+   DATA SOURCE BADGE
+   ============================================ */
+.data-source {
+    background: #E8F4FD;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 24px;
+    border-left: 4px solid #1A3A5C;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.data-source span { color: #1A3A5C; font-size: 14px; }
+.badge-success {
+    background: #D4EDDA;
+    color: #155724;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.badge-info {
+    background: #D1ECF1;
+    color: #0C5460;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ============================================
+   FILTERS
+   ============================================ */
+.filters {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.filters .row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.filters .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+.filters .search-box input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s;
+}
+.filters .search-box input:focus {
+    outline: none;
+    border-color: #1A3A5C;
+}
+.filters .search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+}
+.filters select {
+    padding: 10px 16px;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    background: white;
+    cursor: pointer;
+    min-width: 150px;
+}
+.filters select:focus {
+    outline: none;
+    border-color: #1A3A5C;
+}
+.filters .badge-count {
+    background: #1A3A5C;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.filters .clear-btn {
+    padding: 8px 16px;
+    background: #E5E7EB;
+    color: #1A1A2E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+.filters .clear-btn:hover { background: #D1D5DB; }
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer-text {
+    text-align: center;
+    padding: 20px;
+    color: #9CA3AF;
+    font-size: 13px;
+    border-top: 1px solid #E5E7EB;
+    margin-top: 32px;
+}
+.footer-text i { color: #D4A847; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .filters .row { gap: 12px; }
+    .filters .search-box { min-width: 150px; }
+}
+@media (max-width: 768px) {
+    .sidebar { width: 200px; }
+    .main-content { margin-left: 200px; padding: 16px; }
+    .filters .row { flex-direction: column; }
+    .filters .search-box { width: 100%; }
+    .filters select { width: 100%; }
+    .topbar h1 { font-size: 22px; }
+}
+@media (max-width: 480px) {
+    .sidebar { width: 60px; }
+    .sidebar-header .logo { font-size: 18px; }
+    .sidebar-header .subtitle { display: none; }
+    .sidebar-nav .nav-item span { display: none; }
+    .sidebar-nav .nav-label { display: none; }
+    .main-content { margin-left: 60px; padding: 12px; }
+    .topbar h1 { font-size: 18px; }
+    .topbar .admin-info span { display: none; }
+}
