@@ -31,7 +31,7 @@ Educational institutions store large volumes of academic data in student record 
 > **Mini-Capstone Project** — Special Topics in Computer Science
 > Demonstrated at the intersection of **Software Engineering**, **Data Analytics**, and **Machine Learning**.
 
-> 📖 **Presentation-friendly project guide:** [`docs/project-guide.html`](docs/project-guide.html)
+> 📖 **Presentation-friendly project guide:** [`docs/project-guide.html`]( https://keotshepile2.github.io/Academic-Analytics-System-ProjectGuide/)
 
 ---
 
