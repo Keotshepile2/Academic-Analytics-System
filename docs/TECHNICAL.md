@@ -759,10 +759,10 @@ joblib.dump(scaler, 'models/scaler.pkl')
 | Item | Value |
 |---|---|
 | Python | 3.11 |
-| pandas | *(pin your actual version)* |
-| NumPy | *(pin your actual version)* |
-| scikit-learn | *(pin your actual version)* |
-| joblib | *(pin your actual version)* |
+| pandas | *2.1.0* |
+| NumPy | *1.26.0* |
+| scikit-learn | *1.5.0* |
+| joblib | *1.4.2* |
 | `random_state` | 42 |
 | Train/test split | 80 / 20, stratified |
 | Cross-validation | 5-fold, stratified |
